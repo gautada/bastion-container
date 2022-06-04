@@ -59,7 +59,7 @@ RUN mv /etc/ssh/sshd_config /etc/ssh/sshd_config~ \
 # │ USER               │
 # ╰――――――――――――――――――――╯
 ARG USER=bastion
-VOLUME /opt/$USER
+# VOLUME /opt/$USER seems to be broken in the podman implementation
 RUN /bin/mkdir -p /opt/$USER \
  && /usr/sbin/addgroup $USER \
  && /usr/sbin/adduser -D -s /bin/ash -G $USER $USER \
