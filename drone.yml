@@ -12,8 +12,7 @@ steps:
     ALPINE_VERSION: 3.16.0
     OPENSSH_VERSION: 9.0_p1
   commands:
-  - podman build --build-arg ALPINE_VERSION=$ALPINE_VERSION --build-arg OPENSSH_VERSION=$OPENSSH_VERSION --file Containerfile --format docker --label 
-revision="$(git rev-parse HEAD)" --label version="$(date +%Y.%m.%d)" --no-cache --tag alpine:build .
+  - podman build --build-arg ALPINE_VERSION=$ALPINE_VERSION --build-arg OPENSSH_VERSION=$OPENSSH_VERSION --file Containerfile --format docker --label revision="$(git rev-parse HEAD)" --label version="$(date +%Y.%m.%d)" --no-cache --tag alpine:build .
 - name: publish
   environment:
     OPENSSH_VERSION: 9.0_p1
