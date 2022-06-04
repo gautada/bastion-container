@@ -1,0 +1,73 @@
+ARG ALPINE_VERSION=3.15.4
+# ╭――――――――――――――――---------------------------------------------------------――╮
+# │                                                                           │
+# │ STAGE 1: bastion-container                                                 │
+# │                                                                           │
+# ╰―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――╯
+FROM alpine:gautada/$ALPINE_VERSION
+
+# ╭――――――――――――――――――――╮
+# │ METADATA           │
+# ╰――――――――――――――――――――╯
+LABEL source="https://github.com/gautada/bastion-container.git"
+LABEL maintainer="Adam Gautier <adam@gautier.org>"
+LABEL description="Bastion container is an OpenSSH implementation."
+
+# ╭――――――――――――――――――――╮
+# │ ENVIRONMENT        │
+# ╰――――――――――――――――――――╯
+ENV ENV="/etc/profile"
+USER root
+WORKDIR /
+
+# ╭――――――――――――――――――――╮
+# │ PACKAGES           │
+# ╰――――――――――――――――――――╯
+RUN /sbin/apk add --no-cache ## Bastion openssh
+
+# ╭――――――――――――――――――――╮
+# │ SUDO               │
+# ╰――――――――――――――――――――╯
+COPY wheel-bastion.sudoers /etc/sudoers.d/wheel-bastion.sudoers
+
+# ╭――――――――――――――――――――╮
+# │ HEALTHCHECK        │
+# ╰――――――――――――――――――――╯
+COPY healthcheck /healthcheck
+COPY hc-bastion.sh /etc/healthcheck.d/hc-bastion.sh
+
+# ╭――――――――――――――――――――╮
+# │ ENTRYPOINT         │
+# ╰――――――――――――――――――――╯
+COPY 01-ep-bastion.sh /etc/entrypoint.d/01-ep-bastion.sh
+
+# ╭――――――――――――――――――――╮
+# │ PORTS              │
+# ╰――――――――――――――――――――╯
+EXPOSE 22/tcp
+
+# ╭――――――――――――――――――――╮
+# │ VOLUMES            │
+# ╰――――――――――――――――――――╯
+VOLUME /opt/bastion
+
+# ╭――――――――――――――――――――╮
+# │ APPLICATION        │
+# ╰――――――――――――――――――――╯
+COPY bastion-setup /usr/bin/bastion-setup
+COPY bastion.conf /etc/ssh/bastion.conf
+RUN /bin/cat /etc/ssh/bastion.conf >> /etc/ssh/sshd_config
+
+# ╭――――――――――――――――――――╮
+# │ USER               │
+# ╰――――――――――――――――――――╯
+ARG USER=bastion
+RUN /bin/mkdir -p /opt/$USER \
+ && /usr/sbin/addgroup $USER \
+ && /usr/sbin/adduser -D -s /bin/ash -G $USER $USER \
+ && /usr/sbin/usermod -aG wheel $USER \
+ && /bin/echo "$USER:$USER" | chpasswd \
+ && /bin/chown $USER:$USER -R /opt/$USER
+
+USER $USER
+WORKDIR /home/$USER
