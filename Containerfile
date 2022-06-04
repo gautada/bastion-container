@@ -4,7 +4,7 @@ ARG ALPINE_VERSION=3.15.4
 # │ STAGE 1: bastion-container                                                 │
 # │                                                                           │
 # ╰―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――╯
-FROM alpine:gautada/$ALPINE_VERSION
+FROM gautada/alpine:$ALPINE_VERSION
 
 # ╭――――――――――――――――――――╮
 # │ METADATA           │
