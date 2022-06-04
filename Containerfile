@@ -57,7 +57,8 @@ VOLUME /opt/bastion
 # ╰――――――――――――――――――――╯
 COPY bastion-setup /usr/bin/bastion-setup
 COPY bastion.conf /etc/ssh/bastion.conf
-RUN /bin/cat /etc/ssh/bastion.conf >> /etc/ssh/sshd_config
+RUN mv /etc/ssh/sshd_config /etc/ssh/sshd_config~ \
+ && ash -c "/bin/cat /etc/ssh/sshd_config~ /etc/ssh/bastion.conf > /etc/ssh/sshd_config"
 
 # ╭――――――――――――――――――――╮
 # │ USER               │
