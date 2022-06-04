@@ -35,7 +35,6 @@ COPY wheel-bastion.sudoers /etc/sudoers.d/wheel-bastion.sudoers
 # ╭――――――――――――――――――――╮
 # │ HEALTHCHECK        │
 # ╰――――――――――――――――――――╯
-COPY healthcheck /healthcheck
 COPY hc-bastion.sh /etc/healthcheck.d/hc-bastion.sh
 
 # ╭――――――――――――――――――――╮
