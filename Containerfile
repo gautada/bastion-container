@@ -19,11 +19,13 @@ LABEL description="Bastion container is an OpenSSH implementation."
 ENV ENV="/etc/profile"
 USER root
 WORKDIR /
+ARG OPENSSH_VERSION
+ARG OPENSSH_PACKAGE="$OPENSSH_VERSION"-r1
 
 # ╭――――――――――――――――――――╮
 # │ PACKAGES           │
 # ╰――――――――――――――――――――╯
-RUN /sbin/apk add --no-cache ## Bastion openssh
+RUN /sbin/apk add --no-cache openssh=$OPENSSH_PACKAGE
 
 # ╭――――――――――――――――――――╮
 # │ SUDO               │
