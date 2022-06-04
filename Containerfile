@@ -48,11 +48,6 @@ COPY 01-ep-bastion.sh /etc/entrypoint.d/01-ep-bastion.sh
 EXPOSE 22/tcp
 
 # ╭――――――――――――――――――――╮
-# │ VOLUMES            │
-# ╰――――――――――――――――――――╯
-VOLUME /opt/bastion
-
-# ╭――――――――――――――――――――╮
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
 COPY bastion-setup /usr/bin/bastion-setup
@@ -64,6 +59,7 @@ RUN mv /etc/ssh/sshd_config /etc/ssh/sshd_config~ \
 # │ USER               │
 # ╰――――――――――――――――――――╯
 ARG USER=bastion
+VOLUME /opt/$USER
 RUN /bin/mkdir -p /opt/$USER \
  && /usr/sbin/addgroup $USER \
  && /usr/sbin/adduser -D -s /bin/ash -G $USER $USER \
