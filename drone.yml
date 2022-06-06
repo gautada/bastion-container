@@ -23,5 +23,5 @@ steps:
   commands:
    - podman tag bastion:build docker.io/$DOCKERIO_USERNAME/bastion:$OPENSSH_VERSION
    - podman login --username=$DOCKERIO_USERNAME --password=$DOCKERIO_PASSWORD docker.io
-   - podman push docker.io/$DOCKERIO_USERNAME/alpine:$OPENSSH_VERSION
+   - podman push docker.io/$DOCKERIO_USERNAME/bastion:$OPENSSH_VERSION
   
